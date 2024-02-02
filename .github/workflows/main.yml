@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
   
 jobs:
-  deploy:
+ deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -17,7 +17,7 @@ jobs:
       - name: Setup SSH
         uses: appleboy/ssh-action@master
         with:
-          REMOTE_HOST: ${{ secrets.HOST }}
+          host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
