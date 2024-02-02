@@ -1,21 +1,21 @@
 on:
-  push:
+ push:
     branches:
       - main
-  pull_request:
+ pull_request:
     branches:
       - main
-  workflow_dispatch:
+ workflow_dispatch:
   
 jobs:
  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: appleboy/ssh-action@v0.1.9
+        uses: actions/checkout@v2
 
       - name: Setup SSH
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.9
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -23,4 +23,3 @@ jobs:
           script: |
             echo ${{ secrets.HOST }}
             sudo cp -R ./FirstProject/FirstProject.html /var/www/html/
-
