@@ -25,5 +25,5 @@ jobs:
 
       - name: Copy files to server
         run: |
-          rsync -vrm ./FirstProject/FirstProject.html ${{ secrets.USERNAME }}@${{ secrets.IP }}:/var/www/html/
+          ssh -v ${{ secrets.USERNAME }}@${{ secrets.IP }}
 
