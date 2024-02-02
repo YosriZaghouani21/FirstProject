@@ -1,29 +1,16 @@
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
-
+name: remote ssh command
+on: [push]
 jobs:
-  deploy:
+
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh/
-          echo "${{ secrets.SSH_PRIV_KEY }}" > ~/.ssh/github
-          chmod 600 ~/.ssh/github
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/github
-          ssh-keyscan -H ${{ secrets.IP }} > ~/.ssh/known_hosts
-
-      - name: Copy files to server
-        run: |
-          ssh -T ${{ secrets.USERNAME }}@${{ secrets.IP }}
-      
+    - name: executing remote ssh commands using ssh key
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: whoami
