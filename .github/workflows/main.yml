@@ -26,5 +26,6 @@ jobs:
 
       - name: Copy files to server
         run: |
-          ssh -v ${{ secrets.USERNAME }}@${{ secrets.IP }}
-
+         ssh -i ~/.ssh/id_rsa -v ${{ secrets.USERNAME }}@${{ secrets.IP }}
+        env:
+         SSH_AUTH_SOCK: /dev/null
