@@ -20,7 +20,7 @@ jobs:
           echo "${{ secrets.SSH_PRIV_KEY }}" > ~/.ssh/github
           chmod 600 ~/.ssh/github
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
+          ssh-add ~/.ssh/github
           ssh-keyscan -H ${{ secrets.IP }} > ~/.ssh/known_hosts
 
       - name: Copy files to server
