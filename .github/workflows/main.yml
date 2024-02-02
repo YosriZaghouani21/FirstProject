@@ -1,20 +1,18 @@
 on:
- push:
+  push:
     branches:
       - main
- pull_request:
+  pull_request:
     branches:
       - main
- workflow_dispatch:
-  
+  workflow_dispatch:
+
 jobs:
- deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-    
 
       - name: Setup SSH
         run: |
@@ -23,21 +21,12 @@ jobs:
           echo "${{ secrets.SSH_PUB_KEY }}" > ~/.ssh/id_rsa.pub
           chmod 600 ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa.pub
-          ssh-keyscan -H ${{ secrets.IP }} >> ~/.ssh/known_hosts
-          echo -e "Host *\n    AddKeysToAgent yes\n    IdentityFile ~/.ssh/id_rsa\n" > ~/.ssh/config
-          if [[ "$RUNNER_OS" == "Darwin" ]]; then
-            echo "    UseKeychain yes" >> ~/.ssh/config
-          fi
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
-
-
-
+          ssh-keyscan -H ${{ secrets.IP }} > ~/.ssh/known_hosts
 
       - name: Copy files to server
         run: |
-          ssh-keyscan -H ${{ secrets.IP }} >> ~/.ssh/known_hosts
           ssh -i ~/.ssh/id_rsa -o PasswordAuthentication=no -v ${{ secrets.USERNAME }}@${{ secrets.IP }}
         env:
-          SSH_AUTH_SOCK: /dev/null
-
+          SSH_AUTH_SOCK: ${{ secrets.SSH_AUTH_SOCK }}
