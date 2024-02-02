@@ -25,4 +25,5 @@ jobs:
 
       - name: Copy files to server
         run: |
-          rsync -vrm ./FirstProject/FirstProject.html ${{ secrets.USER_IP }}:/var/www/html/
+          rsync -vrm ./FirstProject/FirstProject.html ${{ secrets.USERNAME }}@${{ secrets.IP }}:/var/www/html/
+
