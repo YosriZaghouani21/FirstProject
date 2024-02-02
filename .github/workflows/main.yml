@@ -28,11 +28,16 @@ jobs:
           if [[ "$RUNNER_OS" == "Darwin" ]]; then
             echo "    UseKeychain yes" >> ~/.ssh/config
           fi
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+
 
 
 
       - name: Copy files to server
         run: |
-         ssh -i ~/.ssh/id_rsa -v ${{ secrets.USERNAME }}@${{ secrets.IP }}
+          ssh-keyscan -H ${{ secrets.IP }} >> ~/.ssh/known_hosts
+          ssh -i ~/.ssh/id_rsa -o PasswordAuthentication=no -v ${{ secrets.USERNAME }}@${{ secrets.IP }}
         env:
-         SSH_AUTH_SOCK: /dev/null
+          SSH_AUTH_SOCK: /dev/null
+
