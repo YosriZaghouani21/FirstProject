@@ -27,6 +27,5 @@ jobs:
 
       - name: Copy files to server
         run: |
-          ssh -i ~/.ssh/id_rsa -o PasswordAuthentication=no -v ${{ secrets.USERNAME }}@${{ secrets.IP }}
-        env:
-          SSH_AUTH_SOCK: ${{ secrets.SSH_AUTH_SOCK }}
+          ssh -T ${{ secrets.USERNAME }}@${{ secrets.IP }}
+      
