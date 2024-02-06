@@ -14,3 +14,12 @@ jobs:
         key: ${{ secrets.KEY }}
         port: 22
         script: whoami
+    - name: copy file via ssh key
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        port: 22
+        key: ${{ secrets.KEY }}
+        source: .
+        target: /var/www/html
