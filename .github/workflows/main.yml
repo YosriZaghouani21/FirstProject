@@ -1,68 +1,25 @@
 name: remote ssh command
 on: [push]
 jobs:
+
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Generate SSH key
-      run: |
-        mkdir -p ~/.ssh
-        ssh-keygen -t rsa -b  4096 -f ~/.ssh/id_rsa -q -N ""
-
-    - name: Add SSH key to the ssh-agent
-      run: |
-        eval "$(ssh-agent -s)"
-        ssh-add ~/.ssh/id_rsa
-
-    - name: Create directory on remote server
+    - name: executing remote ssh commands using ssh key
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.KEY }}
-        port:  22
-        script: mkdir -p .ssh
-
-    - name: Copy public key to remote server
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        port:  22
-        key: ${{ secrets.KEY }}
-        source: ~/.ssh/id_rsa.pub
-        target: .ssh/authorized_keys
-
-    - name: Set permissions on remote server
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.KEY }}
-        port:  22
-        script: |
-          chmod  700 ~/.ssh
-          chmod  600 ~/.ssh/authorized_keys
-
-    - name: Execute remote ssh commands using ssh key
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.KEY }}
-        port:  22
+        port: 22
         script: whoami
-
-    - name: Copy files via ssh key
+    - name: copy file via ssh key
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER }}
-        port:  22
+        port: 22
         key: ${{ secrets.KEY }}
         source: .
         target: /var/www/html
