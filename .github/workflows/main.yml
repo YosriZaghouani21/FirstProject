@@ -27,7 +27,7 @@ jobs:
     - name: rsync deployments
       uses: burnett01/rsync-deployments@6.0.0
       with:
-        script: pwd && ls
+        entryPoint: pwd && ls
         switches: -avzr --delete
         path: ./
         remote_path: /var/www/html/
