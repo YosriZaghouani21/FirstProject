@@ -14,13 +14,22 @@ jobs:
         key: ${{ secrets.KEY }}
         port: 22
         script: whoami
-    - name: copy file via ssh key
-      uses: appleboy/scp-action@v0.1.7
+    # - name: copy file via ssh key
+    #   uses: appleboy/scp-action@v0.1.7
+    #   with:
+    #     host: ${{ secrets.HOST }}
+    #     username: ${{ secrets.USER }}
+    #     port: 22
+    #     key: ${{ secrets.KEY }}
+    #     source: ./*
+    #     target: /var/www/html
+    #     overwrite: true
+    - name: rsync deployments
+      uses: burnett01/rsync-deployments@6.0.0
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        port: 22
-        key: ${{ secrets.KEY }}
-        source: ./*
-        target: /var/www/html
-        overwrite: true
+        switches: -avzr --delete
+        path: .
+        remote_path: /var/www/html/
+        remote_host: ${{ secrets.HOST }}
+        remote_user: ${{ secrets.USER }}
+        remote_key: ${{ secrets.KEY }}
